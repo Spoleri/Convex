@@ -211,4 +211,3 @@ class TestCast:
     def test_for_pol_5(self):
         assert self.fm.add(R2Point(0.4, 0.1)).add(R2Point(0.6, 0.1)).count() \
                == 1
-

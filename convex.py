@@ -157,9 +157,10 @@ class Polygon(Figure):
                 self._area += abs(R2Point.area(t, p, self.points.first()))
 
                 # Удаляемый отрезок удовлетворял условию? да => удаляем
-                if all(not Interval(self.points.first(), p).intersection(e)
-                       for e in self.li) and not (p.in_triangle(self.li) or
-                        self.points.first().in_triangle(self.li)):
+                if all(not Interval(self.points.first(), p).intersection(e) for
+                       e in self.li) and \
+                        not (p.in_triangle(self.li)
+                             or self.points.first().in_triangle(self.li)):
                     self.cast -= 1
 
                 p = self.points.pop_first()
@@ -178,29 +179,29 @@ class Polygon(Figure):
                 self._area += abs(R2Point.area(t, p, self.points.last()))
 
                 # Удаляемый отрезок удовлетворял условию? да => удаляем
-                if all(not Interval(self.points.last(), p).intersection(e)
-                       for e in self.li) and not (p.in_triangle(self.li) or
-                self.points.last().in_triangle(self.li)):
+                if all(not Interval(self.points.last(), p).intersection(e) for
+                       e in self.li) and not (p.in_triangle(
+                        self.li) or self.points.last().in_triangle(self.li)):
                     self.cast -= 1
 
                 p = self.points.pop_last()
             self.points.push_last(p)
 
-            if all(not Interval(t, self.points.last()).intersection(e) for
-                   e in self.li) and not (
+            if all(not Interval(t, self.points.last()).intersection(e) for e in
+                   self.li) and not (
                     t.in_triangle(self.li) or self.points.last().in_triangle(
                     self.li)):
                 self.cast += 1
 
-            if all(not Interval(t, self.points.first()).intersection(e) for
-                   e in self.li) and not (
+            if all(not Interval(t, self.points.first()).intersection(e) for e
+                   in self.li) and not (
                     t.in_triangle(self.li) or self.points.first().in_triangle(
                     self.li)):
                 self.cast += 1
 
             # добавление двух новых рёбер
             self._perimeter += t.dist(self.points.first()) + \
-                               t.dist(self.points.last())
+                t.dist(self.points.last())
             self.points.push_first(t)
 
         return self
