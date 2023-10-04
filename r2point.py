@@ -46,6 +46,20 @@ class R2Point:
             return self.x == other.x and self.y == other.y
         return False
 
+    def in_triangle(self, li):
+        p, q, r = li[0].q, li[1].q, li[2].q
+        e1 = (p.x - self.x) * (q.y - p.y) - (q.x - p.x) * (p.y - self.y)
+        e2 = (q.x - self.x) * (r.y - q.y) - (r.x - q.x) * (q.y - self.y)
+        e3 = (r.x - self.x) * (p.y - r.y) - (p.x - r.x) * (r.y - self.y)
+        e = (e1, e2, e3)
+        if all(c < 0 for c in e) or all(c > 0 for c in e):
+            return True
+        else:
+            return False
+
+    def __repr__(self):
+        return f"({self.x}, {self.y})"
+
 
 class Interval:
 

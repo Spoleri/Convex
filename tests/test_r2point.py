@@ -5,6 +5,7 @@ from r2point import R2Point, Interval
 a = R2Point(0, 0)
 b = R2Point(0, 1)
 c = R2Point(1, 0)
+li = [Interval(b, a), Interval(c, b), Interval(a, c)]
 
 
 class TestR2Point:
@@ -74,6 +75,13 @@ class TestR2Point:
     def test_is_light4(self):
         a, b = R2Point(0.0, 0.0), R2Point(1.0, 0.0)
         assert R2Point(0.5, -0.5).is_light(a, b) is True
+
+    def test_in_triangle(self):
+        assert not a.in_triangle(li)
+
+    def test_in_triangle_1(self):
+        a = R2Point(0.5, 0.2)
+        assert a.in_triangle(li)
 
 
 class TestInterval:

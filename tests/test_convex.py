@@ -7,7 +7,7 @@ from convex import Figure, Void, Point, Segment, Polygon
 a = R2Point(0, 0)
 b = R2Point(0, 1)
 c = R2Point(1, 0)
-li = [Interval(a, b), Interval(a, c), Interval(b, c)]
+li = [Interval(b, a), Interval(c, b), Interval(a, c)]
 
 d = R2Point(1, 1)
 e = R2Point(0, 3)
@@ -207,4 +207,8 @@ class TestCast:
 
     def test_for_pol_4(self):
         assert self.fmm.add(c).add(R2Point(-1, -1)).count() == 4
+
+    def test_for_pol_5(self):
+        assert self.fm.add(R2Point(0.4, 0.1)).add(R2Point(0.6, 0.1)).count() \
+               == 1
 
