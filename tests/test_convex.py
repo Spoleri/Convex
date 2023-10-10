@@ -33,7 +33,7 @@ class TestVoid:
         assert self.f.perimeter() == 0.0
 
     # Площадь нульугольника нулевая
-    def test_аrea(self):
+    def test_area(self):
         assert self.f.area() == 0.0
 
     # При добавлении точки нульугольник превращается в одноугольник
@@ -166,7 +166,7 @@ class TestPolygon:
 
     # Изменение площади многоугольника
     #   изначально она равна (неориентированной) площади треугольника
-    def test_аrea1(self):
+    def test_area1(self):
         assert self.f.area() == approx(0.5)
     #   добавление точки может увеличить площадь
 
@@ -174,40 +174,52 @@ class TestPolygon:
         assert self.f.add(R2Point(1.0, 1.0)).area() == approx(1.0)
 
 
+a = R2Point(-2, 2)
+b = R2Point(-2, -2)
+c = R2Point(0, 0)
+li = [Interval(b, a), Interval(c, b), Interval(a, c)]
+e1 = R2Point(3, 3)
+e2 = R2Point(3, 0)
+e3 = R2Point(0, 0)
+
+
 class TestCast:
 
     def setup_method(self):
         self.f = Void(a, b, c)
-        self.fm = Segment(a, c, li)
-        self.fmm = Polygon(a, b, d, li)
+        self.fm = Segment(e, e1, li)
+        self.fmm = Polygon(e, e1, e2, li)
 
     def test_for_void(self):
         assert self.f.count() == 0
 
     def test_for_seg(self):
-        assert self.f.add(d).count() == 0
+        assert self.f.add(e).count() == 0
 
     def test_for_seg_2(self):
-        assert self.f.add(e).add(f).count() == 2
+        assert self.f.add(e).add(e1).count() == 2
 
     def test_for_seg_3(self):
-        assert self.f.add(a).add(b).count() == 2
+        assert self.f.add(e).add(e3).count() == 0
 
     def test_for_seg_4(self):
-        assert self.fm.add(R2Point(2, 0)).count() == 2
+        assert self.fm.add(e3).count() == 1
 
     def test_for_pol(self):
-        assert self.fm.add(R2Point(2, 0)).add(R2Point(1, 1)).count() == 2
+        assert self.fm.add(e2).count() == 3
 
     def test_for_pol_2(self):
-        assert self.fm.add(R2Point(1, 1)).add(R2Point(0, 1)).count() == 4
+        assert self.fm.add(e2).add(e3).count() == 2
 
     def test_for_pol_3(self):
-        assert self.fmm.count() == 2
+        assert self.fmm.count() == 3
 
     def test_for_pol_4(self):
-        assert self.fmm.add(c).add(R2Point(-1, -1)).count() == 4
+        assert self.fmm.add(c).add(R2Point(-1, -1)).count() == 2
 
     def test_for_pol_5(self):
-        assert self.fm.add(R2Point(0.4, 0.1)).add(R2Point(0.6, 0.1)).count() \
-               == 1
+        a = R2Point(-5, 5)
+        b = R2Point(-5, -5)
+        li = (Interval(a, b), Interval(a, c), Interval(b, c))
+        f = Segment(R2Point(-4, 0), R2Point(-3, 0), li)
+        assert f.count() == 2

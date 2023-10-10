@@ -103,3 +103,9 @@ class TestInterval:
 
     def test_intersection_3(self):
         assert self.line_1.intersection(self.line_4)
+
+    def test_out(self):
+        assert self.line_1.out_of_ambit(self.line_2) == 0
+
+    def test_out_1(self):
+        assert self.line_2.out_of_ambit(self.line_4) == 0.5

@@ -26,7 +26,7 @@ class R2Point:
 
     # Расстояние до другой точки
     def dist(self, other):
-        return sqrt((other.x - self.x)**2 + (other.y - self.y)**2)
+        return sqrt((other.x - self.x) ** 2 + (other.y - self.y) ** 2)
 
     # Лежит ли точка внутри "стандартного" прямоугольника?
     def is_inside(self, a, b):
@@ -67,6 +67,7 @@ class Interval:
         self.p, self.q = u, v
         self.kx = self.q.x - self.p.x
         self.ky = self.q.y - self.p.y
+        self.xy = self.ky
         self.x = self.kx * t + self.p.x
         self.y = self.ky * t + self.p.y
 
@@ -83,6 +84,34 @@ class Interval:
             return True
         else:
             return False
+
+    def out_of_ambit(self, other, flag=False):
+        a_1 = (self.p.x - other.p.x) * (other.q.x - other.p.x) + (
+                self.p.y - other.p.y) * (other.q.y - other.p.y)
+        a_2 = (self.p.x - other.q.x) * (other.p.x - other.q.x) + (
+                self.p.y - other.q.y) * (other.p.y - other.q.y)
+        if a_2 < 0 < a_1:
+            a = self.p.dist(other.q)
+        elif a_1 < 0 < a_2:
+            a = self.p.dist(other.p)
+        else:
+            a = 2 * abs(R2Point.area(self.p, other.q, other.p) / other.p.dist(
+                other.q))
+        a_1 = (self.q.x - other.p.x) * (other.q.x - other.p.x) + (
+                self.q.y - other.p.y) * (other.q.y - other.p.y)
+        a_2 = (self.q.x - other.q.x) * (other.p.x - other.q.x) + (
+                self.q.y - other.q.y) * (other.p.y - other.q.y)
+        if a_2 < 0 < a_1:
+            b = self.q.dist(other.q)
+        elif a_1 < 0 < a_2:
+            b = self.q.dist(other.p)
+        else:
+            b = 2 * abs(R2Point.area(self.q, other.q, other.p) / other.p.dist(
+                other.q))
+        if not flag:
+            c = other.out_of_ambit(self, True)
+            return min(a, b, c)
+        return min(a, b)
 
 
 if __name__ == "__main__":
