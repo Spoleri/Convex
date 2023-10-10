@@ -77,7 +77,7 @@ class TestR2Point:
         assert R2Point(0.5, -0.5).is_light(a, b) is True
 
     def test_in_triangle(self):
-        assert not a.in_triangle(li)
+        assert a.in_triangle(li)
 
     def test_in_triangle_1(self):
         a = R2Point(0.5, 0.2)
@@ -93,10 +93,10 @@ class TestInterval:
         self.line_4 = Interval(R2Point(-1, 0.5), R2Point(1, 0.5))
 
     def test_intersection(self):
-        assert not self.line_1.intersection(self.line_2)
+        assert self.line_1.intersection(self.line_2)
 
     def test_intersection_1(self):
-        assert not self.line_1.intersection(self.line_3)
+        assert self.line_1.intersection(self.line_3)
 
     def test_intersection_2(self):
         assert not self.line_1.intersection(self.line_1)

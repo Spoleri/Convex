@@ -52,10 +52,16 @@ class R2Point:
         e2 = (q.x - self.x) * (r.y - q.y) - (r.x - q.x) * (q.y - self.y)
         e3 = (r.x - self.x) * (p.y - r.y) - (p.x - r.x) * (r.y - self.y)
         e = (e1, e2, e3)
-        if all(c < 0 for c in e) or all(c > 0 for c in e):
+        if all(c <= 0 for c in e) or all(c >= 0 for c in e):
             return True
         else:
             return False
+
+    def __mul__(self, other):
+        return R2Point(self.x * other, self.y * other)
+
+    def __add__(self, other):
+        return R2Point(self.x + other.x, self.y + other.y)
 
     def __repr__(self):
         return f"({self.x}, {self.y})"
@@ -80,7 +86,7 @@ class Interval:
         x = other.x.subs(t, T)
         y = other.y.subs(t, T)
         a = tuple(linsolve([self.x - x, self.y - y], (t, T)))[0]
-        if 0 < a[0] < 1 and 0 < a[1] < 1:
+        if 0 <= a[0] <= 1 and 0 <= a[1] <= 1:
             return True
         else:
             return False

@@ -175,20 +175,24 @@ class TestPolygon:
 
 
 a = R2Point(-2, 2)
+a_1 = R2Point(-5, 5)
 b = R2Point(-2, -2)
+b_1 = R2Point(-5, -5)
 c = R2Point(0, 0)
-li = [Interval(b, a), Interval(c, b), Interval(a, c)]
+li1 = (Interval(b, a), Interval(c, b), Interval(a, c))
 e1 = R2Point(3, 3)
 e2 = R2Point(3, 0)
 e3 = R2Point(0, 0)
+li2 = (Interval(b_1, a_1), Interval(c, b_1), Interval(a_1, c))
 
 
 class TestCast:
 
     def setup_method(self):
         self.f = Void(a, b, c)
-        self.fm = Segment(e, e1, li)
-        self.fmm = Polygon(e, e1, e2, li)
+        self.fm = Segment(e, e1, li1)
+        self.fmm = Polygon(e, e1, e2, li1)
+        self.f_1 = Segment(R2Point(-4, 0), R2Point(-3, 0), li2)
 
     def test_for_void(self):
         assert self.f.count() == 0
@@ -218,8 +222,4 @@ class TestCast:
         assert self.fmm.add(c).add(R2Point(-1, -1)).count() == 2
 
     def test_for_pol_5(self):
-        a = R2Point(-5, 5)
-        b = R2Point(-5, -5)
-        li = (Interval(a, b), Interval(a, c), Interval(b, c))
-        f = Segment(R2Point(-4, 0), R2Point(-3, 0), li)
-        assert f.count() == 2
+        assert self.f_1.count() == 0

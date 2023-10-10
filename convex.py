@@ -81,7 +81,8 @@ class Segment(Figure):
         val = Interval(p, q)
         self.cast = 0
         if all(not val.intersection(t) for t in self.li) and all(
-                val.out_of_ambit(c) >= 1 for c in li):
+                val.out_of_ambit(c) >= 1 for c in li) and not (
+                (p + q) * 0.5).in_triangle(li):
             self.cast += 2
 
     def perimeter(self):
@@ -120,7 +121,8 @@ class Polygon(Figure):
         val_list = (Interval(a, b), Interval(c, a), Interval(b, c))
         for i in val_list:
             if all(not i.intersection(t) and i.out_of_ambit(t) >= 1
-                   for t in self.li):
+                    for t in self.li) and not ((i.p + i.q) * 0.5).in_triangle(
+                    li):
                 self.cast += 1
 
     def perimeter(self):
@@ -156,10 +158,12 @@ class Polygon(Figure):
             while t.is_light(p, self.points.first()):
                 self._perimeter -= p.dist(self.points.first())
                 self._area += abs(R2Point.area(t, p, self.points.first()))
+
                 i = Interval(self.points.first(), p)
                 # Удаляемый отрезок удовлетворял условию? да => удаляем
                 if all(not i.intersection(e) and i.out_of_ambit(e) >= 1 for
-                       e in self.li):
+                        e in self.li) and not (
+                        (self.points.first() + p) * 0.5).in_triangle(self.li):
                     self.cast -= 1
 
                 p = self.points.pop_first()
@@ -171,27 +175,34 @@ class Polygon(Figure):
             i = Interval(a, p)
             # Учет промежуточного отрезка
             if all(not i.intersection(e) and i.out_of_ambit(e) >= 1
-                   for e in self.li):
+                   for e in self.li) and not (
+                    (a + p) * 0.5).in_triangle(self.li):
                 self.cast -= 1
 
             while t.is_light(self.points.last(), p):
                 self._perimeter -= p.dist(self.points.last())
                 self._area += abs(R2Point.area(t, p, self.points.last()))
+
                 i = Interval(self.points.last(), p)
                 # Удаляемый отрезок удовлетворял условию? да => удаляем
                 if all(not i.intersection(e) and i.out_of_ambit(e) >= 1 for
-                       e in self.li):
+                       e in self.li) and not (
+                        (self.points.last() + p) * 0.5).in_triangle(self.li):
                     self.cast -= 1
 
                 p = self.points.pop_last()
+
             self.points.push_last(p)
             i = Interval(t, self.points.last())
             if all(not i.intersection(e) and i.out_of_ambit(e) >= 1 for
-                   e in self.li):
+                   e in self.li) and not (
+                    (t + self.points.last()) * 0.5).in_triangle(self.li):
                 self.cast += 1
+
             i = Interval(t, self.points.first())
             if all(not i.intersection(e) and i.out_of_ambit(e) >= 1 for
-                   e in self.li):
+                   e in self.li) and not (
+                    (t + self.points.first()) * 0.5).in_triangle(self.li):
                 self.cast += 1
 
             # добавление двух новых рёбер
