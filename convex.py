@@ -1,3 +1,4 @@
+from coverage import Coverage
 from deq import Deq
 from r2point import R2Point, Interval
 
@@ -18,47 +19,8 @@ class Figure:
 class Void(Figure):
     """ "Hульугольник" """
 
-    def __init__(self, p_1=None, p_2=None, p_3=None):
-        if p_1 is None or p_2 is None or p_3 is None:
-            print("Впишите координаты 3 точек, задающих треугольник:")
-            p_1 = R2Point()
-            t = True
-            while t or p_1 == p_2:
-                t = False
-                p_2 = R2Point()
-                if p_2 == p_1:
-                    print('Введённая точка совпадает с введенной ранее, '
-                          'попробуйте ещё раз')
-            line_1 = Interval(p_1, p_2)
-            t = True
-            while t:
-                t = False
-                p_3 = R2Point()
-                if p_3 == p_1 or p_3 == p_2:
-                    t = True
-                    print('Введённая точка совпадает с введенной ранее, '
-                          'попробуйте ещё раз:')
-                    continue
-                line_2 = Interval(p_1, p_3)
-                if line_1.kx == line_2.kx == 0 or line_1.ky == line_2.ky == 0:
-                    t = True
-                    continue
-
-                if not (line_1.kx == 0 or line_2.kx == 0 or line_1.ky == 0 or
-                        line_2.ky == 0) \
-                        and line_1.kx / line_2.kx == line_1.ky / line_2.ky:
-                    t = True
-                    print('Введенные точки лежат на одной прямой, попробуйте '
-                          'ещё'
-                          'раз:')
-            print("Ввод закончен")
-        line_1 = Interval(p_2, p_1)
-        line_2 = Interval(p_3, p_2)
-        line_3 = Interval(p_1, p_3)
-        self.li = [line_1, line_2, line_3]
-
-    def add(self, p):
-        return Point(p, self.li)
+    def add(self, p, li):
+        return Point(p, li)
 
 
 class Point(Figure):

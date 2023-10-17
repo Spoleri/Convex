@@ -3,6 +3,7 @@ from math import sqrt
 from r2point import R2Point, Interval
 from convex import Figure, Void, Point, Segment, Polygon
 
+
 # Добавлены условия ввода для функционирования тестов в новой системе
 a = R2Point(0, 0)
 b = R2Point(0, 1)
@@ -18,7 +19,7 @@ class TestVoid:
 
     # Инициализация (выполняется для каждого из тестов класса)
     def setup_method(self):
-        self.f = Void(a, b, c)
+        self.f = Void()
 
     # Нульугольник является фигурой
     def test_figure(self):
@@ -38,7 +39,7 @@ class TestVoid:
 
     # При добавлении точки нульугольник превращается в одноугольник
     def test_add(self):
-        assert isinstance(self.f.add(R2Point(0.0, 0.0)), Point)
+        assert isinstance(self.f.add(R2Point(0.0, 0.0), li), Point)
 
 
 class TestPoint:
@@ -184,27 +185,29 @@ e1 = R2Point(3, 3)
 e2 = R2Point(3, 0)
 e3 = R2Point(0, 0)
 li2 = (Interval(b_1, a_1), Interval(c, b_1), Interval(a_1, c))
+li3 = (Interval(b * -1, a * -1), Interval(c, b * -1), Interval(a * -1, c))
 
 
 class TestCast:
 
     def setup_method(self):
-        self.f = Void(a, b, c)
+        self.f = Void()
         self.fm = Segment(e, e1, li1)
         self.fmm = Polygon(e, e1, e2, li1)
         self.f_1 = Segment(R2Point(-4, 0), R2Point(-3, 0), li2)
+        self.f_2 = Polygon(e * -1, e1 * -1, e2 * -1, li3)
 
     def test_for_void(self):
         assert self.f.count() == 0
 
     def test_for_seg(self):
-        assert self.f.add(e).count() == 0
+        assert self.f.add(e, li).count() == 0
 
     def test_for_seg_2(self):
-        assert self.f.add(e).add(e1).count() == 2
+        assert self.f.add(e, li).add(e1).count() == 2
 
     def test_for_seg_3(self):
-        assert self.f.add(e).add(e3).count() == 0
+        assert self.f.add(e, li).add(e3).count() == 0
 
     def test_for_seg_4(self):
         assert self.fm.add(e3).count() == 1
@@ -223,3 +226,13 @@ class TestCast:
 
     def test_for_pol_5(self):
         assert self.f_1.count() == 0
+
+    def test_for_pol_6(self):
+        assert self.f_2.add(e3).count() == 2
+
+    def test_for_pol_7(self):
+        assert self.fmm.add(e3).add(R2Point(4, 4)).count() == 2
+
+    def test_for_pol_8(self):
+        assert self.fmm.add(e3).add(R2Point(4, 4)).add(R2Point(-4, -4)).add(
+            R2Point(-4, 4)).count() == 3
